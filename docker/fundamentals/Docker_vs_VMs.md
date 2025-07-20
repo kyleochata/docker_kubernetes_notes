@@ -20,7 +20,7 @@ Containers
     c. Can enable isolation rules to mitigate the isolation issue
 
 
-![VM versus Container](img/VM_vs_Container_Model.png)
+![VM versus Container](../img/VM_vs_Container_Model.png)
 
 Isolation:
     a) VMs - strong isolation: each VM has own OS providing complete isolation
