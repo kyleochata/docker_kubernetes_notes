@@ -25,3 +25,9 @@ Images can be sources from multiple locations:
 - Docker Hub: official docker repo
 - Private Registries
 - Building your own images through Dockerfiles
+
+## Remove all images in cache
+
+`docker rmi $(docker images -q)`
+
+*`-f`* If you add the `-f` flag then it's a forceful remove (use if conflicts or prompted)
