@@ -1,0 +1,24 @@
+# Stage 1 transpile typescript source code into js executabel
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY package*.json .
+RUN npm ci 
+COPY tsconfig.json tsconfig.json
+COPY src src
+RUN npm run build
+
+# Stage 2 only pull production dependencies
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package*.json .
+RUN npm ci --only=production
+
+# Stage 3: take code from 1 & dependencies from 2
+FROM gcr.io/distroless/nodejs22
+WORKDIR /app
+COPY package*.json .
+COPY --from=deps /app/node_modules node_modules
+COPY --from=build /app/dist/index.js index.js
+
+
+CMD [ "index.js"]

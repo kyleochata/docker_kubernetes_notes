@@ -1,3 +1,5 @@
 node_modules
 **/*.env
 **/*.test.*
+# Dont copy over any local compiles. Have it part of the Dockerfile workflow
+dist
