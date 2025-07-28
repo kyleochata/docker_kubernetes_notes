@@ -60,3 +60,25 @@ API endpoints:
 
 `GET /health`
 - returns `200` and text `up` when queried 
+
+Steps to run:
+At root of project:
+
+Create the container, network, volume for mongodb.
+```
+chmod +x start-db.sh    #mark file as executable
+chmod +x setup.sh
+chmod +x cleanup-db.sh
+./start-db.sh
+```
+
+Change to `/backend`.
+Create `backend` container to allow for name recognition to communicate with `mongodb` container on the `key-value-net` network.
+```
+docker build -t key-value-backend -f dockerfile.dev
+docker run -d --network key-value-net --name backend -p 3000:3000 key-value-backend
+```
+
+`curl http://localhost:3000/health` should respond with `up` if backend container can communicate with the `mongodb` container.
+    - `docker logs backend` should also give confirmation.
+

@@ -12,6 +12,7 @@ app.get('/health', (req, res) => {
 
 
 console.log("Connecting to DB")
+// This will only connect if this backend container is on the same named network as the mongodb container
 mongoose.connect("mongodb://mongodb/key-value-db", {
     auth: {
         username: "key-value-user",
