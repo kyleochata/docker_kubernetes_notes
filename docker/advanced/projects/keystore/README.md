@@ -72,11 +72,19 @@ chmod +x cleanup-db.sh
 ./start-db.sh
 ```
 
+If using manual setup rather than `start-backend.sh`
 Change to `/backend`.
 Create `backend` container to allow for name recognition to communicate with `mongodb` container on the `key-value-net` network.
 ```
 docker build -t key-value-backend -f dockerfile.dev
 docker run -d --network key-value-net --name backend -p 3000:3000 key-value-backend
+```
+
+If using `start-backend.sh`:
+Allow executable and then create backend image and container 
+```
+chmod +x start-backend.sh
+./start-backend.sh
 ```
 
 `curl http://localhost:3000/health` should respond with `up` if backend container can communicate with the `mongodb` container.

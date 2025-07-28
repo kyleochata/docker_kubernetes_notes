@@ -5,4 +5,5 @@ COPY package*.json .
 RUN npm ci
 
 COPY . .
-CMD ["npm", "start"]
+# if cmd other than npm start, need to add "run"
+CMD ["npm", "run", "dev"] 
