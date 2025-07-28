@@ -51,3 +51,49 @@ curl <bridge_IP_Address>
 
 
 ## User Defined Network
+User defined networks are preferred due to the fact that container IP Addresses can change when they are recreated. User defined networks allow for connection to the container via name making it more user-friendly.
+
+```
+docker network CMD
+
+connect         Connect a container to a network
+create          Create a network
+disconnect      Disconnect a container from a network
+inspect         display detailed info of network
+ls              List networks
+prune           Remove all unused networks
+rm              Remove one or more networks
+```
+
+`docker network create <net_name>`
+
+`docker network connect <network_name> <container_name>`
+- Will need to run `docker network inspect <network_name>` to visually confirm connection
+- `docker inspect <container_name>` will also give info on network the container is connected to 
+    - `"DNSNames":` are all the names within the user defined network that will be able to allow for connection to the container. (must use IP for bridge networks)
+```
+"Config": [
+    {
+        "Subnet": "172.18.0.0/16",
+        "Gateway": "172.18.0.1"
+    }
+]
+```
+- The first 2 values of the `"Subnet"` are reserved and line up with the networks IP.
+- Last 2 values before the `/` are what changes for the containers added
+-`/16`: is the CIDR notation for the subnet mask. Locks the first 2 values `172.18` as the network prefix. 
+    - First 16 bits are the network portion and the final 16 for the host address
+- `"Gateway"`: is the entrypoint to the network and is reserved
+
+`docker run -it --network <network_name> alpine:3.20 sh`
+```
+apk add curl        #download curl to alpine
+curl <container_name>
+```
+- Connect the new container to the user-defined network and we are able to `curl` to the previously connected containers by their name rather than their specific IP Address within the network
+    - Only works for named networks
+
+## Host Network
+Removes the isolation between the Docker host and the containers running
+
+`docker run --network host <img_name>:<img_tag>`
