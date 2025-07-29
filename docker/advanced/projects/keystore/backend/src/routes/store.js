@@ -31,11 +31,12 @@ keyValueRouter.post('/', async (req, res, next) => {
 
 keyValueRouter.get('/:key', async (req, res, next) => {
     try{
-        const key = req.body.key
+        const key = req.params.key
         const doc = await KeyValue.findOne({key})
         if (!doc) {
             reqError(404, "Not found. Unable to find key")
         }
+        res.status(200).json(doc)
     } catch(err) {
         next(err)
     }
@@ -43,14 +44,23 @@ keyValueRouter.get('/:key', async (req, res, next) => {
 
 keyValueRouter.put('/:key', async (req, res, next) => {
     try{
-        const {key, value} = req.body
-        if (key === undefined) {
+        const key = req.params.key
+        const {value} = req.body
+        if (!key) {
             reqError(404, "Not Found. No key provided")
         }
-        const updateDoc = KeyValue.findOneAndUpdate({key, value})
+        if (!value) {
+            reqError(400, "Value for key not provided")
+        }
+        const updateDoc = await KeyValue.findOneAndUpdate({key}, {value}, {new: true})
         if (!updateDoc) {
             reqError(404, "Not Found. Unable to find key")
         }
+        res.status(200).json({
+            message: "Key-value pair updated successfully",
+            key: updateDoc.key,
+            value: keyValueRouter.value
+        })
     } catch(err) {
         next(err)
     }
@@ -58,11 +68,11 @@ keyValueRouter.put('/:key', async (req, res, next) => {
 
 keyValueRouter.delete('/:key', async (req, res, next) => {
     try{
-        const key = req.body.key
-        if (key === undefined) {
+        const key = req.params
+        if (!key) {
             reqError(404, "Not Found. Unable to find key")
         }
-        const deleteKey = KeyValue.findOneAndDelete(key)
+        const deleteKey = await KeyValue.findOneAndDelete(key)
         if (!deleteKey) {
             reqError(404, "Not found. Unable to find key")
         }
