@@ -1,0 +1,51 @@
+# Prefix attached to container, volumes, networks etc.
+name: key-value-app
+services:
+  backend:
+    build:
+      context: backend
+      dockerfile: dockerfile.dev
+    ports:
+      - 3000:3000
+    env_file:
+      - .env.db-key-value
+    environment:
+      - MONGODB_HOST=db     # just db since both are in the same network
+      - PORT=3000
+    depends_on:
+      - db                 # db service is an upstream service of backend
+    networks:
+      - key-value-net
+    develop:
+      watch:
+        - action: sync
+          path: ./backend/src
+          target: /app/src
+  db:
+    image: mongodb/mongodb-community-server:7.0-ubuntu2204
+    ports:
+      # - target: 80
+      #   published: 8080
+      #   protocol: tcp
+      #   mode: host
+      - 27017:27017
+    env_file:
+      - .env.db-root
+      - .env.db-key-value
+    volumes:
+      - type: bind
+        source: ./db-config/mongo-init.js
+        target: /docker-entrypoint-initdb.d/mongo-init.js
+        read_only: true
+      # - './db-config/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro'
+      - type: volume
+        source: mongodb-data
+        target: /data/db
+    networks:
+      - key-value-net
+
+volumes:
+  mongodb-data:
+
+networks:
+  key-value-net:
