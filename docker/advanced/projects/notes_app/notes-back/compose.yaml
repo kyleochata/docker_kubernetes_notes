@@ -1,25 +1,25 @@
 services:
-  notebooks:
+  notes:
     build:
       context: .
       dockerfile: dockerfile.dev
     ports:
-      - 3000:80
+      - 3001:80
     environment:
       - PORT=80
-      - DB_URL=mongodb://${NOTEBOOKS_USER}:${NOTEBOOKS_PASSWORD}@notebooks-db/${NOTEBOOKS_DB}
+      - DB_URL=mongodb://${NOTES_USER}:${NOTES_PASSWORD}@notes-db/${NOTES_DB}
     env_file:
       - .env
     networks:
-      - notebooks-net
+      - notes-net
     depends_on:
-      - notebooks-db
+      - notes-db
     develop:
       watch:
         - action: sync
           path: ./src
           target: /app/src
-  notebooks-db:
+  notes-db:
     image: mongodb/mongodb-community-server:7.0-ubuntu2204
     env_file:
       - .env
@@ -30,13 +30,13 @@ services:
         read_only: true
       # - './db-config/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro'
       - type: volume
-        source: notebooks-data
+        source: notes-data
         target: /data/db
     networks:
-      - notebooks-net
+      - notes-net
 
 volumes:
-  notebooks-data:
+  notes-data:
 
 networks:
-  notebooks-net:
+  notes-net:
