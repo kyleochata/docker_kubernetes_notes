@@ -2,7 +2,8 @@ services:
   notebooks:
     build:
       context: .
-      dockerfile: dockerfile.dev
+      dockerfile: dockerfile
+      target: dev     # change to production later
     ports:
       - 3000:80
     environment:

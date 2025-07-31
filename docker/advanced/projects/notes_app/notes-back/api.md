@@ -22,3 +22,6 @@ DELETE /api/notes/:id
 
 GET /health
 - return 200 and text up
+
+`docker build -t image_name:tag --target=development .`
+- `--target=development` allows us to target just the development part of the dockerfile

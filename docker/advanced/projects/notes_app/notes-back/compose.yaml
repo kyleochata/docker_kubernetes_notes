@@ -2,7 +2,8 @@ services:
   notes:
     build:
       context: .
-      dockerfile: dockerfile.dev
+      dockerfile: dockerfile
+      target: dev     # change to production later
     ports:
       - 3001:80
     environment:
@@ -28,7 +29,6 @@ services:
         source: ./db-config/mongo-init.js
         target: /docker-entrypoint-initdb.d/mongo-init.js
         read_only: true
-      # - './db-config/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro'
       - type: volume
         source: notes-data
         target: /data/db
