@@ -1,8 +1,25 @@
 const express = require('express')
 const mongoose = require("mongoose")
-const app = express()
+const bodyParser = require("body-parser")
 
-app.get('/api/notes', (req, res) => res.json({message: "hello from notes"}))
+const app = express()
+const notesRoutes = require('./routes')
+
+app.use(bodyParser.json())
+app.use('/api/notes', notesRoutes)
+
+app.use((req, res, next) => {
+    res.status(404).json({error: "Not found"})
+})
+
+// CENTRAL ERROR-HANDLE
+app.use((err, req, res, next) => {
+    console.error(err)
+    const status = err.status || 500
+    const message = err.message || "Internal Server Error"
+    res.status(status).json({error: message})
+})
+
 
 const port = process.env.PORT
 
