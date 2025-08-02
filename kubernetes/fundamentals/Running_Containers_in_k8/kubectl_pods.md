@@ -34,7 +34,7 @@ Kubectl takes CLI commands and translates it into API instructions to be sent to
 - This is better for connectivity due to when a pod stops and restarts or is redeployed the IP address is bound to change
 - Easier to connect via a named `Service` through `kubectl expose`
 - Once a pod is exposed into a `Service`, then it will allow for other pods to communicate with the `Service` via `Cluster-IP` or the `Service` name
-
+- `NodePort`: Primarily used for exposure of Service to external traffic (outside of cluster)
 
 `kubectl get service`
 - Retrieve the list of services
