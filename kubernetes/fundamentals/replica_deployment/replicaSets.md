@@ -56,3 +56,10 @@ If we change the template on an already running `rs` then it will not automatica
 It will only see if there are enough pods existing to satisfy it's configuration and only use the new image in the template once it's required to start new pods. 
 
 Updating pods with purely ReplicaSets is not the easiest thing to do. That's where `Deployment` comes in: higher abstraction that comes in and handles rolling out updates
+
+If we create a new pod that matches the criteria for the selector in the `rs`:
+- It will show that there is +1 to the current pods, then delete the newly created / stand-alone pod to get back to the `rs` configured number of pods that should be running
+- `rs` is a k8 object who's job is to ensure that there are only the configured number of pods running that match it's selector
+
+If a `rs` gets newly created when there's pod(s) that match the `rs` selector:
+- the `rs` will see how many existing pod(s) there are and only create the difference between existing and desired amount of replicaSets
