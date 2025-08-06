@@ -47,6 +47,18 @@ spec:
         rollingUpdate: ...
 ```
 
+## Deployment CMDs
+`kubectl get deployments`
+- View all deploymnents in the cluster.
+
+`kubectl get deployment <name> -o yaml`
+- Get more detailed information in yaml format
+
+`kubectl describe deployment <name>`
+
+`kubectl get pods -l <label_name>=<value>`
+- see if all pods of a label are running
+
 ## Rolling Updates
 
 `kubectl rollout <CMD>`

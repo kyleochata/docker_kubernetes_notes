@@ -6,6 +6,8 @@ Services allow us to expose, through a stable IP or internal DNS name a network 
 - Frontend will just communicate with the service and the service will handle routing to the various pods.
 - Pods are ephemeral and the internal IP address is expected to change over the lifecycle of the pod (restarts, rollouts, etc.)
 
+* Name of a svc is more stable than it's IP; IP changes if svc is ever deleted and reupped*
+
 ```
 apiVersion: v1
 kind: Service
@@ -28,6 +30,8 @@ Only accessible within the cluster
 When to use:
 - Internal communication b/w microservices within the cluster
 - Often combined with ingress to expose applications via HTTP and HTTPS
+
+
 
 ## NodePort
 Exposes theservice on each Node's IPat a static port
