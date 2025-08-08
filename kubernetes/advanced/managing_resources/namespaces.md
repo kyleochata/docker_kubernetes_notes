@@ -36,6 +36,10 @@ Best Practice around namespaces:
 `kubectl get <resource> --namespace <namespace_name>`
 - Get desired resource in the specified namespace
 
+Get resource across all namespaces:
+- `kubectl get <resource> <-A | --all-namespaces>`
+- Use the `-A` || `--all-namespaces` flags to get the desired resource(s) across all namespaces
+
 To add a resource to a non-default namespace:
 - Add the `namespace: <namespace>` to the metadata section of the resource's metadata section of the yaml file.
 - After creating the resource, `kubectl get pod` it will show that no resources are found in the default namespace.
@@ -48,3 +52,5 @@ To set the context of the current namespace rather than always doing `-n`:
 - `kubeclt config get-contexts` || `kubectl config view`: check the current context settings
 
 ***ALWAYS do `kubectl config get-contexts` | `kubectl config view` before running destructive cmds to ensure correct namespace***
+
+If you run a delete cmd on a namespace, all resources in that namespace will also be deleted.
