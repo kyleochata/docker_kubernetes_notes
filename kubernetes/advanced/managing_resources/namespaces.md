@@ -54,3 +54,61 @@ To set the context of the current namespace rather than always doing `-n`:
 ***ALWAYS do `kubectl config get-contexts` | `kubectl config view` before running destructive cmds to ensure correct namespace***
 
 If you run a delete cmd on a namespace, all resources in that namespace will also be deleted.
+
+## Cross-Namespace Service Communication
+
+color-api.yaml
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: color-api
+  namespace: dev
+  labels:
+    name: color-api
+spec:
+  containers:
+  - name: color-api
+    image: kyleetrata/color-api:1.1.1
+    ports:
+      - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: color-api-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: color-api
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+dev-ns.yaml
+```
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+```
+
+traffic-gen.yaml
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: traffic-gen
+  labels:
+    app: traffic-gen
+spec:
+  containers:
+    - name: traffic-gen
+      image: kyleetrata/traffic-gen:1.0.0
+      args:
+        - '<service_name>.<namespace>.svc.cluster.local/api'  # Fully qualified namespace
+        - '0.5'
+```
+
+In order for pods/services to communicate across namespaces will require the fully qualified namespace: `'<service_name>.<namespace>.svc.cluster.local'`

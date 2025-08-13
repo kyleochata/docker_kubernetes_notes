@@ -4,23 +4,17 @@ metadata:
   name: color-api
   namespace: dev
   labels:
-    name: color-api
+    app: color-api
 spec:
   containers:
   - name: color-api
     image: kyleetrata/color-api:1.1.1
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
     ports:
       - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: color-api-svc
-spec:
-  type: ClusterIP
-  selector:
-    app: color-api
-  ports:
-  - port: 80
-    targetPort: 80
-

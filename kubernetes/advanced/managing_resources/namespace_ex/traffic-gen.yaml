@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: traffic-gen
+  labels:
+    app: traffic-gen
+spec:
+  containers:
+    - name: traffic-gen
+      image: kyleetrata/traffic-gen:1.0.0
+      args:
+        # - '<service_name>.<namespace>.svc.cluster.local' = Fully qualified namespace
+        - 'color-api-svc/api'
+        - '0.5'
