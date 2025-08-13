@@ -30,6 +30,7 @@ app.get('/api', (req, res) => {
     return res.send(`Color: ${color}\t Hostname: ${hostname} `)
 })
 
+// readiness probe endpoint
 app.get('/ready', (req, res) => {
     if (fail_readiness) {
        return res.sendStatus(503) 
@@ -37,10 +38,16 @@ app.get('/ready', (req, res) => {
     return res.send('ok')
 })
 
+//liveness probe endpoint
 app.get('/health', (req, res) => {
     if (fail_liveness) {
         return res.sendStatus(503)
     }
+    return res.send('ok')
+})
+
+// startup probe endpoint
+app.get('/up', (req, res) => {
     return res.send('ok')
 })
 
@@ -49,9 +56,7 @@ if (delay_startup) {
 
     //Purposefully block event loop and execution for 60s.
     // Illustrate startup probes
-    while (Date.now() - start < 60000) {
-
-    }
+    while (Date.now() - start < 60000) {}
 }
 
 app.listen(port, () => {

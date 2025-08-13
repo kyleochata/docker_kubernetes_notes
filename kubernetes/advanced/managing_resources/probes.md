@@ -12,3 +12,23 @@ Checks if the container is still running. If the liveness probe fails, k8 will r
 
 ## Readiness Probe
 Checks if the container is ready to accept traffic. If the readiness probe fails, the container will be removed from the list of endpoints that can receive traffic. **Keeps executing throughout the container lifecycle**
+
+```
+spec:
+    startupProbe:
+        httpGet:
+            path: /up
+            port: 80
+        failureThreshold: 3
+        periodSeconds: 5
+    livenessProbe:
+        httpGet:
+            path: /health
+            port:80
+        failureThreshold: 3
+        periodSeconds: 10
+```
+
+`httpGet`: requires a `path` & `port` values to know where and how to get to the probe endpoint.
+`failureThreshold`: number of times the probe is allowed to fail
+`periodSeconds`: number of seconds between probe tries
