@@ -18,7 +18,7 @@ spec:
       - name: DELAY_STARTUP
         value: 'false'
       - name: FAIL_LIVENESS 
-        value: 'true'
+        value: 'false'
     startupProbe:
       httpGet:
         path: /up

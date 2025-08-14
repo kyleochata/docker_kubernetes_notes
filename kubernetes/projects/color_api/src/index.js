@@ -8,6 +8,7 @@ const hostname = os.hostname()
 
 const delay_startup = process.env.DELAY_STARTUP === 'true'
 const fail_liveness = process.env.FAIL_LIVENESS === 'true'
+// if fail readieness is true then randmize if the container will fail or not
 const fail_readiness = process.env.FAIL_READINESS === 'true' ? Math.random() < 0.5 : false
 
 console.log(`Delay startup: ${delay_startup}`)

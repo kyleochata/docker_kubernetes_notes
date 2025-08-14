@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: traffic-gen
+  labels:
+    app: traffic-gen
+spec:
+  containers:
+  - name: traffic-gen
+    image: kyleetrata/traffic-gen:1.0.0
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    args:
+      - 'color-api-svc/api'
+      - '0.5'
