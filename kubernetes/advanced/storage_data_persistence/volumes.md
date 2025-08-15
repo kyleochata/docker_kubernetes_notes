@@ -62,17 +62,4 @@ Ex for [empty-dir-ex](./volume_ex/empty-dir-example.yaml)
 - `kubectl exec -it empty-dir-demo -c empty-dir-writer -- sh`
 
 
-## Persistent Volume Claims
-Claim durable storage for usage in Pods. Can't use PV directly in Pods
 
-A `PersistentVolumeClaim` is what actually reserves a PV (when using static povisioning) or creates and reserves a PV (when dynamic provisioning)
-- Claims are bound to a single `PersistentVolume`, and a `PersistentVolume` can have at most one claim bound to it.
-    - One to one volume to claim
-    - Can set specific criteria in a claim,so that only PVs that match these criteria are considered for binds
-    - Be mindful of the possibility for extra unused capacity (static provisioning)
-    - Reclamation policies can be `Retain`, `Delete`, or `Recycle`(depreciated)
-- Access Modes:
-    - `ReadWriteOnce`: volume can be mounted as a read-write by a single node. Can be used by any number of Pods within the node.
-    - `ReadOnlyMany`: volume can be mounted as read-only by many nodes.
-    - `ReadWriteMany`: volume can be mounted as read-write by many nodes.
-    - `ReadWriteOncePod`: volume can be mounted as read-write by a single Pod.
