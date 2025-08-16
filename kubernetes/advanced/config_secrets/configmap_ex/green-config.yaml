@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: green-config
+data:
+  color.txt: green
+  COLOR_CONFIG_PATH: /mnt/config/color.txt
+  hello-from-green.js: |
+    console.log("Hello from")
+    console.log("The green config map")
+  

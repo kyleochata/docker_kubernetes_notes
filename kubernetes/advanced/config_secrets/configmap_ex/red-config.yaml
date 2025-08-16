@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: red-config
+data:
+  COLOR: red
+  multiline.js: |
+    console.log("Vert bar")
+    console.log("denotes multilines")
