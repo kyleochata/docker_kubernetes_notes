@@ -60,11 +60,17 @@ exit
 Force delete PV:
 `kubectl patch pv <pv_name> -p '{"metadata":{"finalizers":null}}'`
 - Manually removes the finalizer that can leave the pv in a terminating status for a long time
-
+- `--all` to delete all.
 Force delete PVC:
 `kubectl delete pvc <pvc_name> --force --grace-period=0`
+- `--all` to delete all
 
 
 ## StatefulSet Lab: Dynamic Volume Provisioning
 Dynamic provisioning is the claim is made first and then the pv's are made to fit the claim.
 - Remove the storageClassName property or set to standard in the volumeClaimTemplate
+
+Hostpath deletion in minikube:
+```
+minikube ssh
+cd /tmp/hostpath-provisioner/default/
