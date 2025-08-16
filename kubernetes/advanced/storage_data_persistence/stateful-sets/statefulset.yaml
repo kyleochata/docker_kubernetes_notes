@@ -1,0 +1,48 @@
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata: 
+#   name: local-storage
+# provisioner: kubernetes.io/no-provisioner
+# volumeBindingMode: WaitForFirstConsumer
+#---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: demo-ss
+spec:
+  selector:
+    matchLabels:
+      app: busybox
+  serviceName: busybox
+  replicas: 2
+  template:
+    metadata:
+      # name: local-vol-pod # Don't include a name; handled by statefulset
+      labels:
+        app: busybox
+    spec: 
+      containers:
+      - name: busybox
+        image: busybox:1.36.1
+        command:
+          - 'sh'
+          - '-c'
+          - 'sleep 3600'
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        volumeMounts:
+          - name: local-volume
+            mountPath: /mnt/local 
+  volumeClaimTemplates:
+  - metadata:
+      name: local-volume
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      # storageClassName: local-storage # Static volume provisioning
+      storageClassName: standard        # Or omitt for dynamic volume provisioning
+      resources:
+        requests:
+          storage: 128Mi
