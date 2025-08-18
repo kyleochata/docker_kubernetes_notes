@@ -40,3 +40,16 @@ http://127.0.0.1:64756
 curl -X POST http://127.0.0.1:64756/api/color/primary \
      -H "Content-Type: application/json" \
      -d '{"value": "purple"}'
+
+
+### Docker and Minikube redeploy image with same tag
+When there's a small bug and want to quickly rebuild the docker image with the same image tag:
+1. `docker rmi <image_name>:tag`
+2. `kubectl delete <resource> <resource_name>`
+    - Remove/Stop any resources that're currently using a pod that's running that image
+3. `minikube image rm <image_name>`
+    - Remove the image from minikube to prevent caching and using the old outdated image (bug will still be there if not XD)
+4. Able to go through normal `docker build` & `docker push` with the same tag
+5. Apply yaml files for resources stopped.
+6. Image should be the same image_tag as before just without the bug
+
