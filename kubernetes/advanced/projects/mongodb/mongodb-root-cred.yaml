@@ -4,5 +4,5 @@ metadata:
   name: mongodb-root-creds
 type: Opaque
 data:
-  username: cm9vdF91c2Vy # root_user
+  username: cm9vdF91c2Vy # root_user echo -n <string> | base64
   password: cm9vdF9wYXNzd29yZA== # root_password

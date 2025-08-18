@@ -1,4 +1,52 @@
-`echo -n "string" | base64`
+# MongoDB StatefulSet for color-api Persistent Storage
+This Kubernetes StatefulSet configuration provides highly available MongoDB instances to serve as persistent storage for the color-api microservice. The implementation demonstrates several key Kubernetes patterns:
+
+## Architecture Overview
+- Stateful Workload: MongoDB is deployed as a StatefulSet to maintain stable network identities and persistent storage
+- Headless Service: Communication occurs via a headless Service (mongodb-svc) enabling direct DNS resolution to individual Pods
+
+## Secure Initialization:
+- Root credentials managed through Kubernetes Secrets
+- Custom users/databases initialized via ConfigMap-mounted initialization scripts
+- Proper security context for MongoDB container
+
+## Key Features
+
+### StatefulSet Characteristics:
+- Stable, ordered deployment and scaling (ordinal index: 0-N)
+- PersistentVolumeClaims with volumeClaimTemplates for data durability
+- Pod identity maintained across reschedules (hostname, storage)
+
+### Service Discovery:
+- Direct Pod access via FQDN(fully qualified domain name): `mongodb-ss-<ordinal>.mongodb-svc.<namespace>.svc.cluster.local`
+- DNS SRV records for replica set configuration
+
+### Security:
+- Secrets-based credential management. 
+    - Normally would just do: `kubectl create secret generic <secret_name> --from-literal <key>=<value>` for secret creation.
+    - Created yaml files for demo purposes.
+- Future: 
+    - RBAC for users.
+
+### Operational Readiness:
+- Liveness and readiness probes for health monitoring
+- Resource limits and requests
+
+## Integration with color-api
+The color-api microservice connects to specific MongoDB replicas using the headless Service DNS entries. The API stores color data as documents with schema:
+```
+{
+  "key": String,
+  "value": String
+}
+```
+This implementation serves as a complete example of:
+- Cloud-native storage patterns
+- Secure credential management
+- Stateful application deployment
+- Microservice data persistence
+
+
 
 ## Mongodb Init testing:
 `kubectl exec -it mongodb-ss-0 -- mongosh`
@@ -31,15 +79,13 @@ Cleanup:
 After creating teh color-api deployment & svc, expose the svc `minikube service color-svc`
 - Creates IP Address to allow for communication with the color api pod
 ```
-curl -X POST http://<IP_From_minikube_cmd>/api/notebooks \
-     -H "Content-Type: application/json" \
-     -d '{"name": "notebook_1", "description":"first notebook"}'
-```
-http://127.0.0.1:64756
-
-curl -X POST http://127.0.0.1:64756/api/color/primary \
+curl -X POST http://<color_svc>/api/color/primary \
      -H "Content-Type: application/json" \
      -d '{"value": "purple"}'
+
+curl http://color-svc/api?colorKey=<string>
+```
+`<color_svc>` : get from `minikube service color-svc`
 
 
 ### Docker and Minikube redeploy image with same tag
