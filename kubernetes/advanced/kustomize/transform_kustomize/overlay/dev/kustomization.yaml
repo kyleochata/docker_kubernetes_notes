@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: dev
+
+namePrefix: dev-
+nameSuffix: -alpha
+
+# commonLabels and annotations will add to the metadata of not just the resource
+# but also the templates and selectors of those resources
+commonLabels:
+  project: e-commerce
+  tier: backend
+
+commonAnnotations:
+  team: finnance
+  repo: github-repo
+
+images:
+  - name: nginx   # name of pod/resource to overwrite
+    newName: newNginx
+    newTag: 1.27.1
+
+replicas:
+  - name: nginx   # anme of deployment
+    count: 2
+
+resources:
+  - ../../base

@@ -19,3 +19,13 @@
         - K8 atuomatically mounts this for service accounts
         - API server uses HTTPS with a certificate signed by the cluster's CA (cert authority).
     - curl pod and k8 api server do the TLS handshake. k8 api server sends its TLS certificate. The curl pod uses the cacert (which contains the public key of the Kubernetes Certificate Authority) to verify the digital signature on the TLS certificate. This proves the TLS cert was issued by the cluster's trusted CA, confirming the pod is indeed talking to the real k8 api. Then, inside the now-secure connection, the curl pod shows the api its token to authorize the specific operations and HTTPS requests it wants to perform
+
+## Lab Cleanup
+
+Lazy: `minikube delete` then `minikube start`
+- delete entire cluster and then start a new instance
+
+Semi-lazy: Delete the namespaces. `kubectl delete namespace dev prod`
+
+**Lazy ways will delete all resources! Caution if other pods are running**
+
