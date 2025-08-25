@@ -8,9 +8,17 @@ nameSuffix: -alpha
 
 # commonLabels and annotations will add to the metadata of not just the resource
 # but also the templates and selectors of those resources
-commonLabels:
-  project: e-commerce
-  tier: backend
+# commonLabels:
+#   project: e-commerce
+#   tier: backend
+
+# commonLabels depreciated. Use labels instead
+labels:
+  - pairs:
+      project: e-commerce
+      tier: backend
+    includeSelectors: true
+    includeTemplates: true
 
 commonAnnotations:
   team: finnance
@@ -25,5 +33,29 @@ replicas:
   - name: nginx   # anme of deployment
     count: 2
 
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: feature-flag-config
+    literals:
+      - use_db=true
+      - expose_metrics=true
+    options:
+      disableNameSuffixHash: true
+  - name: db-init-config
+    files:
+      - db-init.js
+  - name: env-local-config
+    envs:
+      - .env.local
+
+secretGenerator:
+  - name: env-local-config
+    envs:
+      - .env.local
+    type: Opaque
+
 resources:
   - ../../base
+  - nginx-deploy.yaml
