@@ -1,2 +1,10 @@
 - op: remove
   path: /spec/template/spec/containers/0/resources
+
+  # json eq:
+  # [
+  #   {
+  #     "op": "remove",
+  #     "path": "/spec/template/spec/containers/0/resources"
+  #   }
+  # ]

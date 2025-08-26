@@ -99,4 +99,14 @@ JSON files for patch
 ```
 patches:
     - path: JSON_path
+      target:
+        group: apps
+        version: v1
+        kind: Deployment
+        name: dep_name
+
+        labelSelector: "<key>=<value>"
+        annotationSelector: "<key>=<value>"
 ```
+if name is left off, it will apply to all the resources of that kind within the group/version specified. 
+labelSelector and annotationSelector are other ways to target resources for the patch to effect.
