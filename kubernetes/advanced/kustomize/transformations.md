@@ -80,6 +80,23 @@ secretGenerator:
 Do a typical volume mount for the configMap / Secret within the deployment, statefulset, pod manifest. 
 Kustomize is smart enough to add the prefix, suffix, suffixHash to any of the mounted secrets or configMaps to follow the naming convention stated in the overlay.
 
-```
 
+# Patches
+Way to finely control customizations within the overlay to only target specific items. It looks just like a normal manifest for that resource, but only targeting things to add or differentiate from the base resource's manifest.
+
+`patches`
+- Standard way for applying the patches, as the patchesmerge and pathcesjson are depreciated.
+- `patch: |-`: Inline Patch
+    - need the kind & metatdata.name for K8 and Kustomize to know what the resource type and name it is trying to update with the patch
+    - Only specify within the patch the parts that are to be updated/changed (must be different from the base layer's manifest for that resource)
+- If there is no resource or container matching the fields applied in the patch, then Kustomize and K8 add it to the base layer's manifest
+    - Will append for items not in the base layer; Merge for things that're already there, but missing some of the stuff that the patch is updating.
+
+- `path`: pass the path to the yaml file that has the patch
+
+JSON files for patch
+- Uses json operations for more explicit and granular control.
+```
+patches:
+    - path: JSON_path
 ```

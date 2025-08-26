@@ -6,3 +6,4 @@ namespace: dev
 resources:
   - nginx-deploy.yaml
   - nginx-svc.yaml
+  - rev-proxy.yaml
